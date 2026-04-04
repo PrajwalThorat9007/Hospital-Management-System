@@ -1,5 +1,6 @@
 package com.spring.hospitalmanagementsystem.controller;
 
+import com.spring.hospitalmanagementsystem.dto.PatientDto;
 import com.spring.hospitalmanagementsystem.entity.Patient;
 import com.spring.hospitalmanagementsystem.service.PatientService;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,8 @@ public class PatientController {
 
     // CREATE
     @PostMapping
-    public Patient addPatient(@RequestBody Patient patient) {
-        return patientService.addPatient(patient);
+    public Patient addPatient(@RequestBody PatientDto dto) {
+        return patientService.addPatient(dto);
     }
 
     // READ ALL
@@ -37,8 +38,8 @@ public class PatientController {
     // UPDATE
     @PutMapping("/{id}")
     public Patient updatePatient(@PathVariable int id,
-                                 @RequestBody Patient patient) {
-        return patientService.updatePatient(id, patient);
+                                 @RequestBody PatientDto dto) {
+        return patientService.updatePatient(id, dto);
     }
 
     // DELETE

@@ -1,5 +1,6 @@
 package com.spring.hospitalmanagementsystem.service;
 
+import com.spring.hospitalmanagementsystem.dto.PatientDto;
 import com.spring.hospitalmanagementsystem.entity.Patient;
 import com.spring.hospitalmanagementsystem.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,18 @@ public class PatientService {
     }
 
     // CREATE
-    public Patient addPatient(Patient patient) {
+    public Patient addPatient(PatientDto dto) {
+        Patient patient = new Patient(
+                dto.getName(),
+                dto.getAge(),
+                dto.getGender(),
+                dto.getDisease(),
+                dto.getAddress(),
+                dto.getPhoneNumber()
+        );
         return patientRepository.save(patient);
     }
+
 
     // READ ALL
     public List<Patient> getAllPatients() {
@@ -33,15 +43,15 @@ public class PatientService {
     }
 
     // UPDATE
-    public Patient updatePatient(int id, Patient updatedPatient) {
+    public Patient updatePatient(int id, PatientDto dto) {
         Patient existing = getPatientById(id);
 
-        existing.setName(updatedPatient.getName());
-        existing.setAge(updatedPatient.getAge());
-        existing.setGender(updatedPatient.getGender());
-        existing.setDisease(updatedPatient.getDisease());
-        existing.setAddress(updatedPatient.getAddress());
-        existing.setPhoneNumber(updatedPatient.getPhoneNumber());
+        existing.setName(dto.getName());
+        existing.setAge(dto.getAge());
+        existing.setGender(dto.getGender());
+        existing.setDisease(dto.getDisease());
+        existing.setAddress(dto.getAddress());
+        existing.setPhoneNumber(dto.getPhoneNumber());
 
         return patientRepository.save(existing);
     }
