@@ -1,5 +1,5 @@
 package com.spring.hospitalmanagementsystem.entity;
 
-public class Role {
+public enum Role {
     ADMIN
 }
