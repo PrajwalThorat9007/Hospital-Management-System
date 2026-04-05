@@ -1,5 +1,6 @@
 package com.spring.hospitalmanagementsystem.service;
 
+import com.spring.hospitalmanagementsystem.config.JwtService;
 import com.spring.hospitalmanagementsystem.dto.AuthRequest;
 import com.spring.hospitalmanagementsystem.dto.AuthResponse;
 import com.spring.hospitalmanagementsystem.entity.Role;
@@ -11,15 +12,20 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository){
-        this.userRepository=userRepository;
+    public AuthService(UserRepository userRepository, JwtService jwtService) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
+
+
+
 
     public AuthResponse register(AuthRequest request){
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            return new AuthResponse("User already exists");
+            return new AuthResponse(null,"User already exists");
         }
 
         User user=new User(request.getName(),
@@ -29,17 +35,21 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return new AuthResponse("User registered successfully");
+        return new AuthResponse(null,"User registered successfully");
     }
 
-    public AuthResponse login(AuthRequest request){
-        User user=userRepository.findByEmail(request.getEmail()).orElseThrow(()->new RuntimeException("User not found"));
+    public AuthResponse login(AuthRequest request) {
 
-        if(!user.getPassword().equals(request.getPassword())){
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        return new AuthResponse("Login successful");
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new AuthResponse(token, "Login successful");
     }
 
 
